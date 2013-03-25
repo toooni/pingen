@@ -36,7 +36,7 @@
         /**
          * @var string Base URL of Pingen API
          */
-        protected $sBaseURL = 'https://api.pingen.com/';
+        protected $sBaseURL = 'https://dev-api.pingen.com';
 
         /**
          * @var array Available connection methods
@@ -78,38 +78,45 @@
         }
 
         /**
-         * List your available documents
+         * You can list your available documents
          *
-         * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
+         * See https://www.pingen.com/en/developer/endpoints-documents.html
          *
-         * @param array $aOptions
-         * @return string (json)
+         * @param int $iLimit Limit the amount of results
+         * @param int $iPage When limiting the results, specifies page
+         * @param string $sSort Sorts the list by the available values
+         * @param string $sSortType Defines the way of sorting
+         * @return mixed
          */
-        public function listDocuments($aOptions = array())
+        public function listDocuments($iLimit = 0, $iPage = 1, $sSort = 'recipient', $sSortType = 'asc')
         {
-            return $this->execute('document/list', $aOptions);
+            return $this->execute("document/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
          * Get information about a specific document
+         *
+         * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
          *
          * @param int $iDocumentId
          * @return string (json)
          */
         public function getDocument($iDocumentId)
         {
-            return $this->execute('document/get', array('id' => $iDocumentId));
+            return $this->execute("document/get/id/$iDocumentId");
         }
 
         /**
          * Download a specific document as pdf
+         *
+         * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
          *
          * @param int $iDocumentId
          * @return application/pdf
          */
         public function getDocumentPdf($iDocumentId)
         {
-            return $this->execute('document/pdf', array('id' => $iDocumentId));
+            return $this->execute("document/pdf/id/$iDocumentId");
         }
 
         /**
@@ -117,16 +124,14 @@
          *
          * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
          *
-         * @param int $iDocumentId
+         * @param int $iDocumentId Document id
+         * @param int $iPage Number of page that will be grabbed
+         * @param int $iSize Withd of preview
          * @return image/png
          */
-        public function getDocumentPreview($iDocumentId, $aOptions = array())
+        public function getDocumentPreview($iDocumentId, $iPage = 1, $iSize = 595)
         {
-            $aData = array(
-                'id'   => $iDocumentId,
-                'data' => json_encode($aOptions)
-            );
-            return $this->execute('document/preview', $aData);
+            return $this->execute("document/preview/id/$iDocumentId/page/$iPage/size/$iSize");
         }
 
         /**
@@ -137,7 +142,7 @@
          */
         public function deleteDocument($iDocumentId)
         {
-            return $this->execute('document/delete', array('id' => $iDocumentId));
+            return $this->execute("document/delete/id/$iDocumentId");
         }
 
         /**
@@ -155,10 +160,9 @@
         ))
         {
             $aData = array(
-                'id'   => $iDocumentId,
                 'data' => json_encode($aOptions)
             );
-            return $this->execute('document/send', $aData);
+            return $this->execute("document/send/id/$iDocumentId", $aData);
         }
 
         /**
@@ -302,7 +306,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return mixed
          */
-        public function  listPosts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function listPosts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("post/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -312,12 +316,12 @@
          *
          * See https://www.pingen.com/en/developer/endpoints-posts.html
          *
-         * @param int $iDocumentId The Id of the post sending
+         * @param int $iPostId The Id of the post sending
          * @return mixed
          */
-        public function getPost($iDocumentId)
+        public function getPost($iPostId)
         {
-            return $this->execute("post/get/id/$iDocumentId");
+            return $this->execute("post/get/id/$iPostId");
         }
 
         /**
@@ -325,12 +329,12 @@
          *
          * See https://www.pingen.com/en/developer/endpoints-posts.html
          *
-         * @param int $iDocumentId The Id of the post sending
+         * @param int $iPostId The Id of the post sending
          * @return mixed
          */
-        public function cancelPost($iDocumentId)
+        public function cancelPost($iPostId)
         {
-            return $this->execute("post/cancel/id/$iDocumentId");
+            return $this->execute("post/cancel/id/$iPostId");
         }
 
         /**
@@ -354,12 +358,12 @@
          *
          * See https://www.pingen.com/en/developer/endpoints-queue.html
          *
-         * @param int $iDocumentId The Id of the queue entry
+         * @param int $iQueueId The Id of the queue entry
          * @return mixed
          */
-        public function getQueue($iDocumentId)
+        public function getQueue($iQueueId)
         {
-            return $this->execute("queue/get/id/$iDocumentId");
+            return $this->execute("queue/get/id/$iQueueId");
         }
 
         /**
@@ -367,13 +371,13 @@
          *
          * See https://www.pingen.com/en/developer/endpoints-queue.html
          *
-         * @param int $iDocumentId The Id of the queue entry
+         * @param int $iQueueId The Id of the queue entry
          * @param array $aData Body Parameters
          * @return mixed
          */
-        public function cancelQueue($iDocumentId, $aData)
+        public function cancelQueue($iQueueId, $aData = array())
         {
-            return $this->execute("queue/cancel/id/$iDocumentId", $aData);
+            return $this->execute("queue/cancel/id/$iQueueId", $aData);
         }
 
         /**
@@ -446,11 +450,63 @@
         }
 
         /**
+         * You can calculate fax sending
+         *
+         * @param int $iNumber Fax number
+         * @param int $iPages Number of pages per document
+         * @param int $iDocuments Number of documents
+         * @param string $sCurrency Currency of calculation
+         * @return mixed
+         */
+        public function faxCalculator($iNumber, $iPages = 1, $iDocuments = 1, $sCurrency = 'CHF')
+        {
+            return $this->execute("calculator/fax/number/$iNumber/pages/$iPages/documents/$iDocuments/currency/$sCurrency");
+        }
+
+        /**
+         * You can calculate post sending
+         *
+         * @param string $sCountry Country code for sending
+         * @param int $iPrint Print option for black/white
+         * @param int $iSpeed Speed option for normal/express
+         * @param int $iPlan Your plan
+         * @param int $iDocuments Number of documents
+         * @param string $sCurrency Currency of payment
+         * @param int $iPagesNormal Number of normal pages
+         * @param int $iPagesESR Number of ESR pages
+         * @return mixed
+         */
+        public function getCalculator($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
+        {
+            return $this->execute("calculator/get/country/$sCountry/print/$iPrint/speed/$iSpeed/plan/$iPlan/documents/$iDocuments/currency/$sCurrency/pages_normal/$iPagesNormal/pages_esr/$iPagesESR");
+        }
+
+        /**
+         * Grabbing your actual credit value
+         *
+         * @return mixed
+         */
+        public function creditAccount()
+        {
+            return $this->execute("account/credit");
+        }
+
+        /**
+         * Grabbing your actual plan
+         *
+         * @return mixed
+         */
+        public function planAccount()
+        {
+            return $this->execute("account/plan");
+        }
+
+        /**
          * @param string $sKeyword
          * @param array $aData
          * @return mixed
          */
-        private function execute($sKeyword, $aData = array())
+        private function execute($sKeyword, $aData = array('id' => 430))
         {
 
             //prepare url
