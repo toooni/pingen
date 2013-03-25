@@ -36,25 +36,12 @@
         /**
          * @var string Base URL of Pingen API
          */
-        protected $sBaseURL = 'https://api.pingen.com';
-
-        /**
-         * @var array Available connection methods
-         */
-        protected $aConnectionMethods = array(
-            'curl',
-            'fsocket'
-        );
+        protected $sBaseURL = 'https://dev-api.pingen.com';
 
         /**
          * @var string Auth token
          */
         private $sToken;
-
-        /**
-         * @var string Used connection method
-         */
-        private $sConnectionMethod;
 
         /**
          * Constructor of class
@@ -63,18 +50,9 @@
          * @param string $sConnectionMethod Connection method
          * @throws Exception Wrong connection method
          */
-        public function __construct($sToken, $sConnectionMethod = 'curl')
+        public function __construct($sToken)
         {
             $this->sToken = $sToken;
-
-            if (!in_array($sConnectionMethod, $this->aConnectionMethods))
-            {
-                throw new Exception("Invalid connection method chosen, currently we accept following methods: " . implode(', ', $this->aConnectionMethods));
-            }
-            else
-            {
-                $this->sConnectionMethod = $sConnectionMethod;
-            }
         }
 
         /**
@@ -86,11 +64,11 @@
          * @param int $iPage When limiting the results, specifies page
          * @param string $sSort Sorts the list by the available values
          * @param string $sSortType Defines the way of sorting
-         * @return mixed
+         * @return object
          */
         public function listDocuments($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("document/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("document/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -99,7 +77,7 @@
          * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
          *
          * @param int $iDocumentId
-         * @return string (json)
+         * @return object
          */
         public function getDocument($iDocumentId)
         {
@@ -138,7 +116,7 @@
          * Delete a specific document
          *
          * @param int $iDocumentId
-         * @return string (json)
+         * @return object
          */
         public function deleteDocument($iDocumentId)
         {
@@ -152,17 +130,11 @@
          *
          * @param int $iDocumentId
          * @param array $aOptions
-         * @return string (json)
+         * @return object
          */
-        public function sendDocument($iDocumentId, $aOptions = array(
-            'speed' => 2,
-            'color' => 0
-        ))
+        public function sendDocument($iDocumentId, $aOptions = array('speed' => 1, 'color' => 1))
         {
-            $aData = array(
-                'data' => json_encode($aOptions)
-            );
-            return $this->execute("document/send/id/$iDocumentId", $aData);
+            return $this->execute("document/send/id/$iDocumentId", $aOptions);
         }
 
         /**
@@ -172,16 +144,11 @@
          *
          * @param string $sFile
          * @param array $aOptions
-         * @return string (json)
+         * @return object
          */
         public function uploadDocument($sFile, $aOptions = array())
         {
-            $sFile = realpath($sFile);
-            $aData = array(
-                'file' => '@' . $sFile,
-                'data' => json_encode($aOptions)
-            );
-            return $this->execute('document/upload', $aData);
+            return $this->execute('document/upload', $aOptions, $sFile);
         }
 
         /**
@@ -193,11 +160,11 @@
          * @param int $iPage When limiting the results, specifies page
          * @param string $sSort Sorts the list by the available values
          * @param string $sSortType Defines the way of sorting
-         * @return mixed
+         * @return object
          */
-        public function listLetters($iLimit = 0, $iPage = 1, $sSort = 'recipient', $sSortType = 'asc')
+        public function listLetters($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("letter/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("letter/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -206,11 +173,11 @@
          * See https://www.pingen.com/en/developer/endpoints-letters.html
          *
          * @param int $iLetterId The Id of the letter
-         * @return mixed
+         * @return object
          */
         public function getLetter($iLetterId)
         {
-            return $this->execute("letter/list/get/id/$iLetterId");
+            return $this->execute("letter/get/id/$iLetterId");
         }
 
         /**
@@ -219,7 +186,7 @@
          * See https://www.pingen.com/en/developer/endpoints-letters.html
          *
          * @param array $aData Body parameters
-         * @return mixed
+         * @return object
          */
         public function addLetter($aData)
         {
@@ -233,7 +200,7 @@
          *
          * @param int $iLetterId The id of the letter
          * @param array $aData Body Parameters
-         * @return mixed
+         * @return object
          */
         public function editLetter($iLetterId, $aData)
         {
@@ -248,7 +215,7 @@
          * @param int $iLetterId The id of the letter
          * @param int $iPage The page of the letter to grab as preview
          * @param int $iSize The width of preview
-         * @return mixed
+         * @return application/image
          */
         public function getLetterPreview($iLetterId, $iPage = 1, $iSize = 595)
         {
@@ -261,7 +228,7 @@
          * See https://www.pingen.com/en/developer/endpoints-letters.html
          *
          * @param int $iLetterId The id of the letter
-         * @return mixed
+         * @return application/pdf
          */
         public function getLetterPdf($iLetterId)
         {
@@ -275,9 +242,9 @@
          *
          * @param int $iLetterId The id of the letter
          * @param array $aData Body Parameters
-         * @return mixed
+         * @return object
          */
-        public function sendLetter($iLetterId, $aData)
+        public function sendLetter($iLetterId, $aData = array('speed' => 1, 'color' => 1))
         {
             return $this->execute("letter/send/id/$iLetterId", $aData);
         }
@@ -288,7 +255,7 @@
          * See https://www.pingen.com/en/developer/endpoints-letters.html
          *
          * @param int $iLetterId The id of the letter
-         * @return mixed
+         * @return object
          */
         public function deleteLetter($iLetterId)
         {
@@ -304,11 +271,11 @@
          * @param int $iPage When limiting the results, specifies page
          * @param string $sSort Sorts the list by available values
          * @param string $sSortType Defines the way of sorting
-         * @return mixed
+         * @return object
          */
         public function listPosts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("post/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("post/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -317,7 +284,7 @@
          * See https://www.pingen.com/en/developer/endpoints-posts.html
          *
          * @param int $iPostId The Id of the post sending
-         * @return mixed
+         * @return object
          */
         public function getPost($iPostId)
         {
@@ -330,7 +297,7 @@
          * See https://www.pingen.com/en/developer/endpoints-posts.html
          *
          * @param int $iPostId The Id of the post sending
-         * @return mixed
+         * @return object
          */
         public function cancelPost($iPostId)
         {
@@ -346,11 +313,11 @@
          * @param int $iPage When limiting the results, specifies page
          * @param string $sSort Sorts the list by available values
          * @param string $sSortType Defines the way of sorting
-         * @return mixed
+         * @return object
          */
         public function listQueue($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("queue/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("queue/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -359,7 +326,7 @@
          * See https://www.pingen.com/en/developer/endpoints-queue.html
          *
          * @param int $iQueueId The Id of the queue entry
-         * @return mixed
+         * @return object
          */
         public function getQueue($iQueueId)
         {
@@ -373,7 +340,7 @@
          *
          * @param int $iQueueId The Id of the queue entry
          * @param array $aData Body Parameters
-         * @return mixed
+         * @return object
          */
         public function cancelQueue($iQueueId, $aData = array())
         {
@@ -389,7 +356,7 @@
          * @param int $iPage When limiting the results, specifies page
          * @param string $sSort Sorts the list by available values
          * @param string $sSortType Defines the way of sorting
-         * @return mixed
+         * @return object
          */
         public function listContacts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
@@ -402,7 +369,7 @@
          * See https://www.pingen.com/en/developer/endpoints-contacts.html
          *
          * @param int $iContactId The Id of the contact
-         * @return mixed
+         * @return object
          */
         public function getContact($iContactId)
         {
@@ -415,7 +382,7 @@
          * See https://www.pingen.com/en/developer/endpoints-contacts.html
          *
          * @param array $aData Body parameters
-         * @return mixed
+         * @return object
          */
         public function addContact($aData)
         {
@@ -429,7 +396,7 @@
          *
          * @param int $iContactId The Id of the contact
          * @param array $aData Body parameters
-         * @return mixed
+         * @return object
          */
         public function editContact($iContactId, $aData)
         {
@@ -442,7 +409,7 @@
          * See https://www.pingen.com/en/developer/endpoints-contacts.html
          *
          * @param int $iContactId The Id of the contact
-         * @return mixed
+         * @return object
          */
         public function deleteContact($iContactId)
         {
@@ -456,7 +423,7 @@
          * @param int $iPages Number of pages per document
          * @param int $iDocuments Number of documents
          * @param string $sCurrency Currency of calculation
-         * @return mixed
+         * @return object
          */
         public function faxCalculator($iNumber, $iPages = 1, $iDocuments = 1, $sCurrency = 'CHF')
         {
@@ -474,17 +441,17 @@
          * @param string $sCurrency Currency of payment
          * @param int $iPagesNormal Number of normal pages
          * @param int $iPagesESR Number of ESR pages
-         * @return mixed
+         * @return object
          */
-        public function getCalculator($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
+        public function postCalculator($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
         {
             return $this->execute("calculator/get/country/$sCountry/print/$iPrint/speed/$iSpeed/plan/$iPlan/documents/$iDocuments/currency/$sCurrency/pages_normal/$iPagesNormal/pages_esr/$iPagesESR");
         }
 
         /**
-         * Grabbing your actual credit value
+         * Grabbing your current credit value
          *
-         * @return mixed
+         * @return object
          */
         public function creditAccount()
         {
@@ -494,7 +461,7 @@
         /**
          * Grabbing your actual plan
          *
-         * @return mixed
+         * @return object
          */
         public function planAccount()
         {
@@ -504,21 +471,25 @@
         /**
          * @param string $sKeyword
          * @param array $aData
-         * @return mixed
+         * @return object
          */
-        private function execute($sKeyword, $aData = array('id' => 430))
+        private function execute($sKeyword, $aBodyParameters = array(), $sFile = false)
         {
+            /* put together parameters */
+            $aData = array();
+            $aData['data'] = json_encode($aBodyParameters);
+            if ($sFile) $aData['file'] = '@' . $sFile;
 
-            //prepare url
+            /* prepare URL */
             $aURLParts = array(
                 $this->sBaseURL,
                 $sKeyword,
                 'token',
                 $this->sToken
             );
-            $sURL      = implode('/', $aURLParts);
+            $sURL = implode('/', $aURLParts);
 
-            //$data['data'] must not be empty
+            /* data may not be empty */
             if (isset($aData['data']) && (count(json_decode($aData['data'])) == 0 || $aData['data'] == ''))
             {
                 unset($aData['data']);
@@ -526,35 +497,6 @@
 
             $jsonResponse = false;
 
-            //send request
-            switch ($this->sConnectionMethod)
-            {
-                case 'curl':
-                    $jsonResponse = $this->execute_curl($sURL, $aData);
-                    break;
-            }
-
-            $objResponse = json_decode($jsonResponse);
-            if ($objResponse->error)
-            {
-                throw new Exception($objResponse->errormessage, $objResponse->errorcode);
-            }
-            else
-            {
-                return $objResponse;
-            }
-        }
-
-        /**
-         * Execute api call using curl
-         *
-         * @param string $sURL Endpoint to execute
-         * @param array $aData Post data to send
-         * @return mixed
-         * @throws Exception Connection error
-         */
-        private function execute_curl($sURL, $aData)
-        {
             try
             {
                 $objCurlConn = curl_init();
@@ -564,10 +506,26 @@
                 curl_setopt($objCurlConn, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYHOST, 0);
                 curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYPEER, 0);
-                return curl_exec($objCurlConn);
+                $mResponse = curl_exec($objCurlConn);
             } catch (Exception $e)
             {
                 throw new Exception("Error occurred in curl connection");
+            }
+
+            /* if PDF or Image, output plain result */
+            if (substr($mResponse, 0, 4)=='%PDF' || substr($mResponse, 1, 3)=='PNG')
+            {
+                return $mResponse;
+            }
+
+            $objResponse = json_decode($mResponse);
+            if ($objResponse->error)
+            {
+                throw new Exception($objResponse->errormessage, $objResponse->errorcode);
+            }
+            else
+            {
+                return $objResponse;
             }
         }
     }
