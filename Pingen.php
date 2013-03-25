@@ -67,7 +67,7 @@
             switch($iMode)
             {
                 case self::MODE_PRODUCTION:
-                    $this->sBaseURL = 'https://api.pingen.com';
+                    $this->sBaseURL = 'https://dev-api.pingen.com';
                     break;
                 case self::MODE_STAGING:
                     $this->sBaseURL = 'https://stage-api.pingen.com';
@@ -88,7 +88,7 @@
          */
         public function documents_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("document/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("document/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -187,7 +187,7 @@
          */
         public function letters_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("letter/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("letter/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -300,7 +300,7 @@
          */
         public function send_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("send/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("send/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -342,7 +342,7 @@
          */
         public function queue_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("queue/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("queue/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -385,7 +385,7 @@
          */
         public function contacts_list($iLimit = 0, $iPage = 1, $sSort = 'id', $sSortType = 'desc')
         {
-            return $this->execute("contact/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("contact/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
