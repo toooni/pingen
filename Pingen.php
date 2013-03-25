@@ -33,7 +33,14 @@
 
     class Pingen
     {
+        /**
+         * @constant string Production Mode
+         */
         const MODE_PRODUCTION = 1;
+
+        /**
+         * @constant string Staging/Development Mode
+         */
         const MODE_STAGING = 2;
 
         /**
