@@ -1,7 +1,7 @@
-<?php
+    <?php
 
     /**
-     * A class to use the API of pingen.com as an integrator
+     * A class to use the API of pingen.com as an integrator (Version 1.01)
      *
      * For more information about Pingen and how to use it as an integrator see
      * https://pingen.com/en/customer/integrator/Briefversand-für-Integratoren.html
@@ -44,6 +44,11 @@
         const MODE_STAGING = 2;
 
         /**
+         * @constant string Library-Version
+         */
+        const VERSION = 1.01;
+
+        /**
          * @var string Base URL of Pingen API
          */
         protected $sBaseURL = '';
@@ -57,8 +62,7 @@
          * Constructor of class
          *
          * @param string $sToken Auth token
-         * @param string $sConnectionMethod Connection method
-         * @throws Exception Wrong connection method
+         * @param integer $iMode Production or Staging Environment
          */
         public function __construct($sToken, $iMode = self::MODE_PRODUCTION)
         {
@@ -520,27 +524,31 @@
                 unset($aData['data']);
             }
 
-            $jsonResponse = false;
+            $objCurlConn = curl_init();
+            curl_setopt($objCurlConn, CURLOPT_URL, $sURL);
+            curl_setopt($objCurlConn, CURLOPT_POST, 1);
+            curl_setopt($objCurlConn, CURLOPT_POSTFIELDS, $aData);
+            curl_setopt($objCurlConn, CURLOPT_RETURNTRANSFER, 1);
 
-            try
-            {
-                $objCurlConn = curl_init();
-                curl_setopt($objCurlConn, CURLOPT_URL, $sURL);
-                curl_setopt($objCurlConn, CURLOPT_POST, 1);
-                curl_setopt($objCurlConn, CURLOPT_POSTFIELDS, $aData);
-                curl_setopt($objCurlConn, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYPEER, 0);
-                $mResponse = curl_exec($objCurlConn);
-            } catch (Exception $e)
-            {
-                throw new Exception("Error occurred in curl connection");
-            }
+            /*
+             * If you are having issues with invalid certificate you could optionally uncomment
+             * these following two lines (not recommended)
+             * The alternative would be to update your CA Root Certificate Bundle.
+            */
+//            curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYHOST, 0);
+//            curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYPEER, 0);
+
+            $mResponse = curl_exec($objCurlConn);
 
             /* if PDF or Image, output plain result */
             if (substr($mResponse, 0, 4)=='%PDF' || substr($mResponse, 1, 3)=='PNG')
             {
                 return $mResponse;
+            }
+
+            if ($mResponse===FALSE)
+            {
+                throw new Exception('An error occured with the curl connection');
             }
 
             $objResponse = json_decode($mResponse);
