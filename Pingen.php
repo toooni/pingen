@@ -66,7 +66,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function listDocuments($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function documents_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("document/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -79,7 +79,7 @@
          * @param int $iDocumentId
          * @return object
          */
-        public function getDocument($iDocumentId)
+        public function documents_get($iDocumentId)
         {
             return $this->execute("document/get/id/$iDocumentId");
         }
@@ -92,7 +92,7 @@
          * @param int $iDocumentId
          * @return application/pdf
          */
-        public function getDocumentPdf($iDocumentId)
+        public function documents_pdf($iDocumentId)
         {
             return $this->execute("document/pdf/id/$iDocumentId");
         }
@@ -107,7 +107,7 @@
          * @param int $iSize Withd of preview
          * @return image/png
          */
-        public function getDocumentPreview($iDocumentId, $iPage = 1, $iSize = 595)
+        public function documents_preview($iDocumentId, $iPage = 1, $iSize = 595)
         {
             return $this->execute("document/preview/id/$iDocumentId/page/$iPage/size/$iSize");
         }
@@ -118,7 +118,7 @@
          * @param int $iDocumentId
          * @return object
          */
-        public function deleteDocument($iDocumentId)
+        public function documents_delete($iDocumentId)
         {
             return $this->execute("document/delete/id/$iDocumentId");
         }
@@ -129,12 +129,14 @@
          * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
          *
          * @param int $iDocumentId
-         * @param array $aOptions
+         * @param int $iSpeed
+         * @param int $iColor
          * @return object
          */
-        public function sendDocument($iDocumentId, $aOptions = array('speed' => 1, 'color' => 1))
+        public function documents_send($iDocumentId, $iSpeed = 1, $iColor = 1)
         {
-            return $this->execute("document/send/id/$iDocumentId", $aOptions);
+            $aData = array('speed' => $iSpeed, 'color' => $iColor);
+            return $this->execute("document/send/id/$iDocumentId", $aData);
         }
 
         /**
@@ -146,7 +148,7 @@
          * @param array $aOptions
          * @return object
          */
-        public function uploadDocument($sFile, $aOptions = array())
+        public function documents_upload($sFile, $aOptions = array())
         {
             return $this->execute('document/upload', $aOptions, $sFile);
         }
@@ -162,7 +164,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function listLetters($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function letters_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("letter/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -175,7 +177,7 @@
          * @param int $iLetterId The Id of the letter
          * @return object
          */
-        public function getLetter($iLetterId)
+        public function letters_get($iLetterId)
         {
             return $this->execute("letter/get/id/$iLetterId");
         }
@@ -188,7 +190,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function addLetter($aData)
+        public function letters_add($aData)
         {
             return $this->execute("letter/add", $aData);
         }
@@ -202,7 +204,7 @@
          * @param array $aData Body Parameters
          * @return object
          */
-        public function editLetter($iLetterId, $aData)
+        public function letters_edit($iLetterId, $aData)
         {
             return $this->execute("letter/edit/id/$iLetterId", $aData);
         }
@@ -217,7 +219,7 @@
          * @param int $iSize The width of preview
          * @return application/image
          */
-        public function getLetterPreview($iLetterId, $iPage = 1, $iSize = 595)
+        public function letters_preview($iLetterId, $iPage = 1, $iSize = 595)
         {
             return $this->execute("letter/preview/id/$iLetterId/page/$iPage/size/$iSize");
         }
@@ -230,7 +232,7 @@
          * @param int $iLetterId The id of the letter
          * @return application/pdf
          */
-        public function getLetterPdf($iLetterId)
+        public function letters_pdf($iLetterId)
         {
             return $this->execute("letter/pdf/id/$iLetterId");
         }
@@ -241,11 +243,13 @@
          * See https://www.pingen.com/en/developer/endpoints-letters.html
          *
          * @param int $iLetterId The id of the letter
-         * @param array $aData Body Parameters
+         * @param int $iSpeed
+         * @param int $iColor
          * @return object
          */
-        public function sendLetter($iLetterId, $aData = array('speed' => 1, 'color' => 1))
+        public function letters_send($iLetterId, $iSpeed = 1, $iColor = 1)
         {
+            $aData = array('speed' => $iSpeed, 'color' => $iColor);
             return $this->execute("letter/send/id/$iLetterId", $aData);
         }
 
@@ -257,7 +261,7 @@
          * @param int $iLetterId The id of the letter
          * @return object
          */
-        public function deleteLetter($iLetterId)
+        public function letters_delete($iLetterId)
         {
             return $this->execute("letter/delete/id/$iLetterId");
         }
@@ -273,7 +277,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function listPosts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function posts_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("post/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -286,7 +290,7 @@
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function getPost($iPostId)
+        public function posts_get($iPostId)
         {
             return $this->execute("post/get/id/$iPostId");
         }
@@ -299,7 +303,7 @@
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function cancelPost($iPostId)
+        public function posts_cancel($iPostId)
         {
             return $this->execute("post/cancel/id/$iPostId");
         }
@@ -315,7 +319,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function listQueue($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function queue_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("queue/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -328,7 +332,7 @@
          * @param int $iQueueId The Id of the queue entry
          * @return object
          */
-        public function getQueue($iQueueId)
+        public function queue_get($iQueueId)
         {
             return $this->execute("queue/get/id/$iQueueId");
         }
@@ -342,7 +346,7 @@
          * @param array $aData Body Parameters
          * @return object
          */
-        public function cancelQueue($iQueueId, $aData = array())
+        public function queue_cancel($iQueueId, $aData = array())
         {
             return $this->execute("queue/cancel/id/$iQueueId", $aData);
         }
@@ -358,7 +362,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function listContacts($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function contacts_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("contact/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -371,7 +375,7 @@
          * @param int $iContactId The Id of the contact
          * @return object
          */
-        public function getContact($iContactId)
+        public function contacts_get($iContactId)
         {
             return $this->execute("contact/get/id/$iContactId");
         }
@@ -384,7 +388,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function addContact($aData)
+        public function contacts_add($aData)
         {
             return $this->execute("contact/add", $aData);
         }
@@ -398,7 +402,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function editContact($iContactId, $aData)
+        public function contacts_edit($iContactId, $aData)
         {
             return $this->execute("contact/edit/id/$iContactId", $aData);
         }
@@ -411,7 +415,7 @@
          * @param int $iContactId The Id of the contact
          * @return object
          */
-        public function deleteContact($iContactId)
+        public function contacts_delete($iContactId)
         {
             return $this->execute("contact/delete/id/$iContactId");
         }
@@ -419,22 +423,22 @@
         /**
          * You can calculate fax sending
          *
-         * @param int $iNumber Fax number
+         * @param string $sNumber Fax number starting with country code and plus at beginning
          * @param int $iPages Number of pages per document
          * @param int $iDocuments Number of documents
          * @param string $sCurrency Currency of calculation
          * @return object
          */
-        public function faxCalculator($iNumber, $iPages = 1, $iDocuments = 1, $sCurrency = 'CHF')
+        public function calculator_fax($sNumber, $iPages = 1, $iDocuments = 1, $sCurrency = 'CHF')
         {
-            return $this->execute("calculator/fax/number/$iNumber/pages/$iPages/documents/$iDocuments/currency/$sCurrency");
+            return $this->execute("calculator/fax/number/$sNumber/pages/$iPages/documents/$iDocuments/currency/$sCurrency");
         }
 
         /**
          * You can calculate post sending
          *
          * @param string $sCountry Country code for sending
-         * @param int $iPrint Print option for black/white
+         * @param int $iPrint Print option for black/color
          * @param int $iSpeed Speed option for normal/express
          * @param int $iPlan Your plan
          * @param int $iDocuments Number of documents
@@ -443,7 +447,7 @@
          * @param int $iPagesESR Number of ESR pages
          * @return object
          */
-        public function postCalculator($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
+        public function calculator_post($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
         {
             return $this->execute("calculator/get/country/$sCountry/print/$iPrint/speed/$iSpeed/plan/$iPlan/documents/$iDocuments/currency/$sCurrency/pages_normal/$iPagesNormal/pages_esr/$iPagesESR");
         }
@@ -453,7 +457,7 @@
          *
          * @return object
          */
-        public function creditAccount()
+        public function account_credit()
         {
             return $this->execute("account/credit");
         }
@@ -463,7 +467,7 @@
          *
          * @return object
          */
-        public function planAccount()
+        public function account_plan()
         {
             return $this->execute("account/plan");
         }
