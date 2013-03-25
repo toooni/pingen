@@ -362,9 +362,9 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function contacts_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function contacts_list($iLimit = 0, $iPage = 1, $sSort = 'id', $sSortType = 'desc')
         {
-            return $this->execute("contact/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("contact/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -431,7 +431,7 @@
          */
         public function calculator_fax($sNumber, $iPages = 1, $iDocuments = 1, $sCurrency = 'CHF')
         {
-            return $this->execute("calculator/fax/number/$sNumber/pages/$iPages/documents/$iDocuments/currency/$sCurrency");
+            return $this->execute("calculator/fax/number/" . urlencode($sNumber) . "/pages/$iPages/documents/$iDocuments/currency/$sCurrency");
         }
 
         /**
@@ -447,7 +447,7 @@
          * @param int $iPagesESR Number of ESR pages
          * @return object
          */
-        public function calculator_post($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iPlan = 1, $iDocuments = 1, $sCurrency = 'CHF', $iPagesNormal = 0, $iPagesESR = 0)
+        public function calculator_post($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iDocuments = 1, $iPagesNormal = 1, $iPagesESR = 0, $iPlan = 1, $sCurrency = 'CHF')
         {
             return $this->execute("calculator/get/country/$sCountry/print/$iPrint/speed/$iSpeed/plan/$iPlan/documents/$iDocuments/currency/$sCurrency/pages_normal/$iPagesNormal/pages_esr/$iPagesESR");
         }
