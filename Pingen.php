@@ -33,10 +33,13 @@
 
     class Pingen
     {
+        const MODE_PRODUCTION = 1;
+        const MODE_STAGING = 2;
+
         /**
          * @var string Base URL of Pingen API
          */
-        protected $sBaseURL = 'https://api.pingen.com';
+        protected $sBaseURL = '';
 
         /**
          * @var string Auth token
@@ -50,9 +53,19 @@
          * @param string $sConnectionMethod Connection method
          * @throws Exception Wrong connection method
          */
-        public function __construct($sToken)
+        public function __construct($sToken, $iMode = self::MODE_PRODUCTION)
         {
             $this->sToken = $sToken;
+
+            switch($iMode)
+            {
+                case self::MODE_PRODUCTION:
+                    $this->sBaseURL = 'https://api.pingen.com';
+                    break;
+                case self::MODE_STAGING:
+                    $this->sBaseURL = 'https://stage-api.pingen.com';
+                    break;
+            }
         }
 
         /**
