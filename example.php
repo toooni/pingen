@@ -12,13 +12,13 @@ try {
     $iSendId = $objResponse->send[0]->send_id;
 
     /* check status of my sending */
-    $objPost = $objPingen->posts_get($iSendId);
+    $objSend = $objPingen->send_get($iSendId);
 
     /*
        to see all status codes go to:
        https://www.pingen.com/en/developer/objects-post.html
     */
-    $iStatusCode = $objPost->item->status;
+    $iStatusCode = $objSend->item->status;
 
 //    /* example of adding a letter */
 //    $objLetterResponse = $objPingen->letters_add(array(

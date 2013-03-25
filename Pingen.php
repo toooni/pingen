@@ -298,9 +298,9 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function posts_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function send_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
-            return $this->execute("post/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
+            return $this->execute("send/list/" . ($iLimit ? "limit/$iLimit/" : "") . "page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
 
         /**
@@ -311,9 +311,9 @@
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function posts_get($iPostId)
+        public function send_get($iPostId)
         {
-            return $this->execute("post/get/id/$iPostId");
+            return $this->execute("send/get/id/$iPostId");
         }
 
         /**
@@ -324,9 +324,9 @@
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function posts_cancel($iPostId)
+        public function send_cancel($iPostId)
         {
-            return $this->execute("post/cancel/id/$iPostId");
+            return $this->execute("send/cancel/id/$iPostId");
         }
 
         /**
