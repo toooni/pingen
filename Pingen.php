@@ -36,7 +36,7 @@
         /**
          * @var string Base URL of Pingen API
          */
-        protected $sBaseURL = 'https://dev-api.pingen.com';
+        protected $sBaseURL = 'https://api.pingen.com';
 
         /**
          * @var string Auth token
@@ -148,8 +148,9 @@
          * @param array $aOptions
          * @return object
          */
-        public function documents_upload($sFile, $aOptions = array())
+        public function documents_upload($sFile, $iSend = 0, $iSpeed = 1, $iColor = 1)
         {
+            $aOptions = array('send' => $iSend, 'speed' => $iSpeed, 'color' => $iColor);
             return $this->execute('document/upload', $aOptions, $sFile);
         }
 
