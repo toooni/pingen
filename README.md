@@ -9,6 +9,7 @@ The official PHP-Class for using the post-mail sending service pingen.com
 
 ## Author
 Graem Lourens <graem.lourens@pingen.com>
+Manuel Reinhard <manu@sprain.ch>
 
 ## License
 
