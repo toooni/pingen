@@ -36,7 +36,7 @@
         /**
          * @var string Base URL of Pingen API
          */
-        protected $sBaseURL = 'https://dev-api.pingen.com';
+        protected $sBaseURL = 'https://api.pingen.com';
 
         /**
          * @var array Available connection methods
