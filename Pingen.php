@@ -88,7 +88,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return mixed
          */
-        public function listDocuments($iLimit = 0, $iPage = 1, $sSort = 'recipient', $sSortType = 'asc')
+        public function listDocuments($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("document/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
