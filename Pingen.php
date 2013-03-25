@@ -67,7 +67,7 @@
             switch($iMode)
             {
                 case self::MODE_PRODUCTION:
-                    $this->sBaseURL = 'https://dev-api.pingen.com';
+                    $this->sBaseURL = 'https://api.pingen.com';
                     break;
                 case self::MODE_STAGING:
                     $this->sBaseURL = 'https://stage-api.pingen.com';
