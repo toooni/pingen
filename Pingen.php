@@ -98,7 +98,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function documents_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function document_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("document/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -111,7 +111,7 @@
          * @param int $iDocumentId
          * @return object
          */
-        public function documents_get($iDocumentId)
+        public function document_get($iDocumentId)
         {
             return $this->execute("document/get/id/$iDocumentId");
         }
@@ -124,7 +124,7 @@
          * @param int $iDocumentId
          * @return application/pdf
          */
-        public function documents_pdf($iDocumentId)
+        public function document_pdf($iDocumentId)
         {
             return $this->execute("document/pdf/id/$iDocumentId");
         }
@@ -139,7 +139,7 @@
          * @param int $iSize Withd of preview
          * @return image/png
          */
-        public function documents_preview($iDocumentId, $iPage = 1, $iSize = 595)
+        public function document_preview($iDocumentId, $iPage = 1, $iSize = 595)
         {
             return $this->execute("document/preview/id/$iDocumentId/page/$iPage/size/$iSize");
         }
@@ -150,7 +150,7 @@
          * @param int $iDocumentId
          * @return object
          */
-        public function documents_delete($iDocumentId)
+        public function document_delete($iDocumentId)
         {
             return $this->execute("document/delete/id/$iDocumentId");
         }
@@ -165,7 +165,7 @@
          * @param int $iColor
          * @return object
          */
-        public function documents_send($iDocumentId, $iSpeed = 1, $iColor = 1)
+        public function document_send($iDocumentId, $iSpeed = 1, $iColor = 1)
         {
             $aData = array('speed' => $iSpeed, 'color' => $iColor);
             return $this->execute("document/send/id/$iDocumentId", $aData);
@@ -180,7 +180,7 @@
          * @param array $aOptions
          * @return object
          */
-        public function documents_upload($sFile, $iSend = 0, $iSpeed = 1, $iColor = 1)
+        public function document_upload($sFile, $iSend = 0, $iSpeed = 1, $iColor = 1)
         {
             $aOptions = array('send' => $iSend, 'speed' => $iSpeed, 'color' => $iColor);
             return $this->execute('document/upload', $aOptions, $sFile);
@@ -197,7 +197,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function letters_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
+        public function letter_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc')
         {
             return $this->execute("letter/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -210,7 +210,7 @@
          * @param int $iLetterId The Id of the letter
          * @return object
          */
-        public function letters_get($iLetterId)
+        public function letter_get($iLetterId)
         {
             return $this->execute("letter/get/id/$iLetterId");
         }
@@ -223,7 +223,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function letters_add($aData)
+        public function letter_add($aData)
         {
             return $this->execute("letter/add", $aData);
         }
@@ -237,7 +237,7 @@
          * @param array $aData Body Parameters
          * @return object
          */
-        public function letters_edit($iLetterId, $aData)
+        public function letter_edit($iLetterId, $aData)
         {
             return $this->execute("letter/edit/id/$iLetterId", $aData);
         }
@@ -252,7 +252,7 @@
          * @param int $iSize The width of preview
          * @return application/image
          */
-        public function letters_preview($iLetterId, $iPage = 1, $iSize = 595)
+        public function letter_preview($iLetterId, $iPage = 1, $iSize = 595)
         {
             return $this->execute("letter/preview/id/$iLetterId/page/$iPage/size/$iSize");
         }
@@ -265,7 +265,7 @@
          * @param int $iLetterId The id of the letter
          * @return application/pdf
          */
-        public function letters_pdf($iLetterId)
+        public function letter_pdf($iLetterId)
         {
             return $this->execute("letter/pdf/id/$iLetterId");
         }
@@ -280,7 +280,7 @@
          * @param int $iColor
          * @return object
          */
-        public function letters_send($iLetterId, $iSpeed = 1, $iColor = 1)
+        public function letter_send($iLetterId, $iSpeed = 1, $iColor = 1)
         {
             $aData = array('speed' => $iSpeed, 'color' => $iColor);
             return $this->execute("letter/send/id/$iLetterId", $aData);
@@ -294,7 +294,7 @@
          * @param int $iLetterId The id of the letter
          * @return object
          */
-        public function letters_delete($iLetterId)
+        public function letter_delete($iLetterId)
         {
             return $this->execute("letter/delete/id/$iLetterId");
         }
@@ -395,7 +395,7 @@
          * @param string $sSortType Defines the way of sorting
          * @return object
          */
-        public function contacts_list($iLimit = 0, $iPage = 1, $sSort = 'id', $sSortType = 'desc')
+        public function contact_list($iLimit = 0, $iPage = 1, $sSort = 'id', $sSortType = 'desc')
         {
             return $this->execute("contact/list/limit/$iLimit/page/$iPage/sort/$sSort/sorttype/$sSortType");
         }
@@ -408,7 +408,7 @@
          * @param int $iContactId The Id of the contact
          * @return object
          */
-        public function contacts_get($iContactId)
+        public function contact_get($iContactId)
         {
             return $this->execute("contact/get/id/$iContactId");
         }
@@ -421,7 +421,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function contacts_add($aData)
+        public function contact_add($aData)
         {
             return $this->execute("contact/add", $aData);
         }
@@ -435,7 +435,7 @@
          * @param array $aData Body parameters
          * @return object
          */
-        public function contacts_edit($iContactId, $aData)
+        public function contact_edit($iContactId, $aData)
         {
             return $this->execute("contact/edit/id/$iContactId", $aData);
         }
@@ -448,7 +448,7 @@
          * @param int $iContactId The Id of the contact
          * @return object
          */
-        public function contacts_delete($iContactId)
+        public function contact_delete($iContactId)
         {
             return $this->execute("contact/delete/id/$iContactId");
         }
