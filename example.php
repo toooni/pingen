@@ -6,7 +6,7 @@ $objPingen = new Pingen('mytoken');
 
 try {
     /* example uploading a document, and automatically sending it priority and in color */
-    $objResponse = $objPingen->documents_upload('example.pdf', 1, 1, 1);
+    $objResponse = $objPingen->document_upload('example.pdf', 1, 1, 1);
 
     /* grab send/post id */
     $iSendId = $objResponse->send[0]->send_id;
@@ -21,7 +21,7 @@ try {
     $iStatusCode = $objSend->item->status;
 
 //    /* example of adding a letter */
-//    $objLetterResponse = $objPingen->letters_add(array(
+//    $objLetterResponse = $objPingen->letter_add(array(
 //        'recipients' => array(
 //            array(
 //                'name' => 'David Peterson',
@@ -38,7 +38,7 @@ try {
 //    $iLetterId = $objLetterResponse->id;
 //
 //    /* sending this letter */
-//    $objSendLetterResponse = $objPingen->letters_send($iLetterId, 1, 1);
+//    $objSendLetterResponse = $objPingen->letter_send($iLetterId, 1, 1);
 //
 //    $iSendId = $objSendLetterResponse->id;
 
