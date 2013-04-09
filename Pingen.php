@@ -54,7 +54,27 @@
         /**
          * @constant string Library-Version
          */
-        const VERSION = 1.02;
+        const VERSION = 1.03;
+
+        /**
+         * @constant string Print in Black & White
+         */
+        const PRINT_BLACK = 0;
+
+        /**
+         * @constant string Print in color
+         */
+        const PRINT_COLOR = 1;
+
+        /**
+         * @constant string Sending speed priority
+         */
+        const SPEED_PRIORITY = 1;
+
+        /**
+         * @constant string Sending speed economy
+         */
+        const SPEED_ECONOMY = 2;
 
         /**
          * @var string Base URL of Pingen API
@@ -74,6 +94,8 @@
          */
         public function __construct($sToken, $iMode = self::MODE_PRODUCTION)
         {
+            if ($iMode!=self::MODE_PRODUCTION && $iMode!=self::MODE_STAGING) throw new Exception('The specified mode does not exist');
+
             $this->sToken = $sToken;
 
             switch($iMode)
@@ -165,7 +187,7 @@
          * @param int $iColor
          * @return object
          */
-        public function document_send($iDocumentId, $iSpeed = 1, $iColor = 1)
+        public function document_send($iDocumentId, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
         {
             $aData = array('speed' => $iSpeed, 'color' => $iColor);
             return $this->execute("document/send/id/$iDocumentId", $aData);
@@ -180,7 +202,7 @@
          * @param array $aOptions
          * @return object
          */
-        public function document_upload($sFile, $iSend = 0, $iSpeed = 1, $iColor = 1)
+        public function document_upload($sFile, $iSend = 0, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
         {
             $aOptions = array('send' => $iSend, 'speed' => $iSpeed, 'color' => $iColor);
             return $this->execute('document/upload', $aOptions, $sFile);
@@ -280,7 +302,7 @@
          * @param int $iColor
          * @return object
          */
-        public function letter_send($iLetterId, $iSpeed = 1, $iColor = 1)
+        public function letter_send($iLetterId, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
         {
             $aData = array('speed' => $iSpeed, 'color' => $iColor);
             return $this->execute("letter/send/id/$iLetterId", $aData);
@@ -480,7 +502,7 @@
          * @param int $iPagesESR Number of ESR pages
          * @return object
          */
-        public function calculator_post($sCountry = 'CH', $iPrint = 1, $iSpeed = 1, $iDocuments = 1, $iPagesNormal = 1, $iPagesESR = 0, $iPlan = 1, $sCurrency = 'CHF')
+        public function calculator_post($sCountry = 'CH', $iSpeed = self::SPEED_PRIORITY, $iPrint = self::PRINT_COLOR, $iDocuments = 1, $iPagesNormal = 1, $iPagesESR = 0, $iPlan = 1, $sCurrency = 'CHF')
         {
             return $this->execute("calculator/get/country/$sCountry/print/$iPrint/speed/$iSpeed/plan/$iPlan/documents/$iDocuments/currency/$sCurrency/pages_normal/$iPagesNormal/pages_esr/$iPagesESR");
         }
@@ -548,15 +570,15 @@
 
             $mResponse = curl_exec($objCurlConn);
 
+            if ($mResponse===FALSE)
+            {
+                throw new Exception('An error occured with the curl connection: ' . curl_error($objCurlConn));
+            }
+
             /* if PDF or Image, output plain result */
             if (substr($mResponse, 0, 4)=='%PDF' || substr($mResponse, 1, 3)=='PNG')
             {
                 return $mResponse;
-            }
-
-            if ($mResponse===FALSE)
-            {
-                throw new Exception('An error occured with the curl connection');
             }
 
             $objResponse = json_decode($mResponse);
