@@ -94,8 +94,6 @@
          */
         public function __construct($sToken, $iMode = self::MODE_PRODUCTION)
         {
-            if ($iMode!=self::MODE_PRODUCTION && $iMode!=self::MODE_STAGING) throw new Exception('The specified mode does not exist');
-
             $this->sToken = $sToken;
 
             switch($iMode)
@@ -105,6 +103,9 @@
                     break;
                 case self::MODE_STAGING:
                     $this->sBaseURL = 'https://stage-api.pingen.com';
+                    break;
+                default:
+                    throw new Exception('The specified mode does not exist');
                     break;
             }
         }
