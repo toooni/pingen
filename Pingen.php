@@ -1,7 +1,7 @@
     <?php
 
     /**
-     * A class to use the API of pingen.com as an integrator (Version 1.02)
+     * A class to use the API of pingen.com as an integrator (Version 1.04)
      *
      * For more information about Pingen and how to use it as an integrator see
      * https://pingen.com/en/customer/integrator/Briefversand-für-Integratoren.html
@@ -54,7 +54,7 @@
         /**
          * @constant string Library-Version
          */
-        const VERSION = 1.03;
+        const VERSION = 1.04;
 
         /**
          * @constant string Print in Black & White
@@ -325,7 +325,7 @@
         /**
          * You can list your available post sends
          *
-         * See https://www.pingen.com/en/developer/endpoints-posts.html
+         * See https://www.pingen.com/en/developer/endpoints-send.html
          *
          * @param int $iLimit Limit the amount of results
          * @param int $iPage When limiting the results, specifies page
@@ -339,29 +339,42 @@
         }
 
         /**
-         * You can get your post object
+         * You can get your send object
          *
-         * See https://www.pingen.com/en/developer/endpoints-posts.html
+         * See https://www.pingen.com/en/developer/endpoints-send.html
          *
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function send_get($iPostId)
+        public function send_get($iSendId)
         {
-            return $this->execute("send/get/id/$iPostId");
+            return $this->execute("send/get/id/$iSendId");
         }
 
         /**
-         * You can cancel post
+         * Cancel your sending
          *
-         * See https://www.pingen.com/en/developer/endpoints-posts.html
+         * See https://www.pingen.com/en/developer/endpoints-send.html
          *
          * @param int $iPostId The Id of the post sending
          * @return object
          */
-        public function send_cancel($iPostId)
+        public function send_cancel($iSendId)
         {
-            return $this->execute("send/cancel/id/$iPostId");
+            return $this->execute("send/cancel/id/$iSendId");
+        }
+
+        /**
+         * Track your sending if possible
+         *
+         * See https://www.pingen.com/en/developer/endpoints-send.html
+         *
+         * @param int $iPostId The Id of the post sending
+         * @return object
+         */
+        public function send_track($iSendId)
+        {
+            return $this->execute("send/track/id/$iSendId");
         }
 
         /**
