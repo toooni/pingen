@@ -6,7 +6,7 @@ $objPingen = new Pingen('mytoken');
 
 try {
     /* example uploading a document, and automatically sending it priority and in color */
-    $objResponse = $objPingen->document_upload('example.pdf', 1, 1, 1);
+    $objResponse = $objPingen->document_upload('example.pdf', 1, Pingen::SPEED_PRIORITY, Pingen::PRINT_COLOR);
 
     /* grab send/post id */
     $iSendId = $objResponse->send[0]->send_id;
