@@ -357,6 +357,19 @@ class Pingen
     }
 
     /**
+     * Retreive your send confirmation document
+     *
+     * See https://www.pingen.com/en/developer/endpoints-send.html
+     *
+     * @param int $iSendId The Id of the post sending
+     * @return object
+     */
+    public function send_confirmation($iSendId)
+    {
+        return $this->execute("send/confirmation/id/$iSendId");
+    }
+
+    /**
      * Cancel your sending
      *
      * See https://www.pingen.com/en/developer/endpoints-send.html
