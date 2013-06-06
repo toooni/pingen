@@ -396,6 +396,23 @@ class Pingen
     }
 
     /**
+     * Get the available speeds for a country or list of countries
+     *
+     * See https://www.pingen.com/en/developer/endpoints-send.html
+     *
+     * @param mixed $mCountries The country (ISO2) or array of countries
+     * @return object
+     */
+    public function send_speed($mCountries)
+    {
+        if (!is_array($mCountries))
+        {
+            $mCountries = array($mCountries);
+        }
+        return $this->execute("send/speed/countries/" . implode(',', $mCountries));
+    }
+
+    /**
      * You can list your queue
      *
      * See https://www.pingen.com/en/developer/endpoints-queue.html
