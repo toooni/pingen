@@ -590,7 +590,7 @@ class Pingen
         /* put together parameters */
         $aData = array();
         $aData['data'] = json_encode($aBodyParameters);
-        if ($sFile) $aData['file'] = '@' . $sFile;
+        if ($sFile) $aData['file'] = $this->getFileData($sFile);
 
         /* prepare URL */
         $aURLParts = array(
@@ -643,6 +643,21 @@ class Pingen
         {
             return $objResponse;
         }
+    }
+
+    /**
+     * @param $sFile
+     *
+     * @return string
+     */
+    private function getFileData($sFile)
+    {
+        // PHP 5.5 introduced a CurlFile object that deprecates the old @filename syntax
+        // See: https://wiki.php.net/rfc/curl-file-upload
+        if (function_exists('curl_file_create')) {
+            return curl_file_create($sFile);
+        }
+        return '@' . $sFile; //backwards compatibility
     }
 
     private function parse_filters($aFilters)
