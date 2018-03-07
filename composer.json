@@ -3,7 +3,6 @@
     "type": "library",
     "description": "The official API-Class for using pingen.com",
     "keywords": ["pingencom", "pingen", "pingen api"],
-    "license": "BSD",
     "authors": [
         {
             "name": "Graem Lourens",
@@ -14,11 +13,12 @@
             "email": "manu@sprain.ch"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.2",
         "ext-curl": "*"
     },
-    "autoload": {
-        "classmap": ["/"]
+    "psr-4": {
+        "pingencom\\": "src/"
     }
 }
