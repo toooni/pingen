@@ -4,7 +4,7 @@
  * A class to use the API of pingen.com as an integrator (Version 1.05)
  *
  * For more information about Pingen and how to use it as an integrator see
- * https://pingen.com/en/customer/integrator/Briefversand-für-Integratoren.html
+ * https://www.pingen.com
  *
  * API documentation can be found here:
  * https://www.pingen.com/en/developer.html
@@ -38,6 +38,7 @@
  * @link https://www.pingen.com/en/developer.html
  */
 
+namespace pingencom;
 
 class Pingen
 {
@@ -54,7 +55,7 @@ class Pingen
     /**
      * @constant string Library-Version
      */
-    const VERSION = 1.05;
+    const VERSION = 1.1;
 
     /**
      * @constant string Print in Black & White
@@ -86,12 +87,11 @@ class Pingen
      */
     private $sToken;
 
-    /**
-     * Constructor of class
-     *
-     * @param string $sToken Auth token
-     * @param integer $iMode Production or Staging Environment
-     */
+	/**
+	 * @param $sToken
+	 * @param int $iMode
+	 * @throws \Exception
+	 */
     public function __construct($sToken, $iMode = self::MODE_PRODUCTION)
     {
         $this->sToken = $sToken;
@@ -105,7 +105,7 @@ class Pingen
                 $this->sBaseURL = 'https://stage-api.pingen.com';
                 break;
             default:
-                throw new Exception('The specified mode does not exist');
+                throw new \Exception('The specified mode does not exist');
                 break;
         }
     }
@@ -119,7 +119,7 @@ class Pingen
      * @param int $iPage When limiting the results, specifies page
      * @param string $sSort Sorts the list by the available values
      * @param string $sSortType Defines the way of sorting
-     * @param string $aFilter Set of filters for list
+     * @param array $aFilter Set of filters for list
      * @return object
      */
     public function document_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc', $aFilter = array())
@@ -206,9 +206,9 @@ class Pingen
      * @param int $iColor
      * @return object
      */
-    public function document_upload($sFile, $iSend = 0, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
+    public function document_upload($sFile, $iSend = false, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
     {
-        $aOptions = array('send' => $iSend, 'speed' => $iSpeed, 'color' => $iColor);
+        $aOptions = array('send' => (boolean)$iSend, 'speed' => $iSpeed, 'color' => $iColor);
         return $this->execute('document/upload', $aOptions, $sFile);
     }
 
@@ -221,7 +221,7 @@ class Pingen
      * @param int $iPage When limiting the results, specifies page
      * @param string $sSort Sorts the list by the available values
      * @param string $sSortType Defines the way of sorting
-     * @param string $aFilter Set of filters for list
+     * @param array $aFilter Set of filters for list
      * @return object
      */
     public function letter_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc', $aFilter = array())
@@ -335,7 +335,7 @@ class Pingen
      * @param int $iPage When limiting the results, specifies page
      * @param string $sSort Sorts the list by available values
      * @param string $sSortType Defines the way of sorting
-     * @param string $aFilter Set of filters for list
+     * @param array $aFilter Set of filters for list
      * @return object
      */
     public function send_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc', $aFilter = array())
@@ -421,7 +421,7 @@ class Pingen
      * @param int $iPage When limiting the results, specifies page
      * @param string $sSort Sorts the list by available values
      * @param string $sSortType Defines the way of sorting
-     * @param string $aFilter Set of filters for list
+     * @param array $aFilter Set of filters for list
      * @return object
      */
     public function queue_list($iLimit = 0, $iPage = 1, $sSort = 'date', $sSortType = 'desc', $aFilter = array())
@@ -465,7 +465,7 @@ class Pingen
      * @param int $iPage When limiting the results, specifies page
      * @param string $sSort Sorts the list by available values
      * @param string $sSortType Defines the way of sorting
-     * @param string $aFilter Set of filters for list
+     * @param array $aFilter Set of filters for list
      * @return object
      */
     public function contact_list($iLimit = 0, $iPage = 1, $sSort = 'id', $sSortType = 'desc', $aFilter = array())
@@ -578,13 +578,13 @@ class Pingen
         return $this->execute("account/plan");
     }
 
-    /**
-     * @param string $sKeyword
-     * @param array $aBodyParameters
-     * @param string $sFile
-     *
-     * @return object
-     */
+	/**
+	 * @param $sKeyword
+	 * @param array $aBodyParameters
+	 * @param bool $sFile
+	 * @return mixed
+	 * @throws \Exception
+	 */
     private function execute($sKeyword, $aBodyParameters = array(), $sFile = false)
     {
         /* put together parameters */
@@ -617,15 +617,15 @@ class Pingen
          * If you are having issues with invalid certificate you could optionally uncomment
          * these following two lines (not recommended)
          * The alternative would be to update your CA Root Certificate Bundle.
-        */
-//            curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYHOST, 0);
-//            curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYPEER, 0);
+         */
+		//curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYHOST, 0);
+		//curl_setopt($objCurlConn, CURLOPT_SSL_VERIFYPEER, 0);
 
         $mResponse = curl_exec($objCurlConn);
 
         if ($mResponse===FALSE)
         {
-            throw new Exception('An error occured with the curl connection: ' . curl_error($objCurlConn));
+            throw new \Exception('An error occured with the curl connection: ' . curl_error($objCurlConn));
         }
 
         /* if PDF or Image, output plain result */
@@ -637,7 +637,7 @@ class Pingen
         $objResponse = json_decode($mResponse);
         if ($objResponse->error)
         {
-            throw new Exception($objResponse->errormessage, $objResponse->errorcode);
+            throw new \Exception($objResponse->errormessage, $objResponse->errorcode);
         }
         else
         {
@@ -660,6 +660,10 @@ class Pingen
         return '@' . $sFile; //backwards compatibility
     }
 
+	/**
+	 * @param $aFilters
+	 * @return string
+	 */
     private function parse_filters($aFilters)
     {
         $aSets = array();
