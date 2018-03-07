@@ -187,11 +187,12 @@ class Pingen
      * @param int $iDocumentId
      * @param int $iSpeed
      * @param int $iColor
+	 * @param int $iEnvelopeId
      * @return object
      */
-    public function document_send($iDocumentId, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
+    public function document_send($iDocumentId, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR, $iEnvelopeId = null)
     {
-        $aData = array('speed' => $iSpeed, 'color' => $iColor);
+        $aData = array('speed' => $iSpeed, 'color' => $iColor, 'envelope' => $iEnvelopeId);
         return $this->execute("document/send/id/$iDocumentId", $aData);
     }
 
@@ -201,14 +202,15 @@ class Pingen
      * See https://www.pingen.com/en/developer/endpoints-documents.html for available options
      *
      * @param string $sFile
-     * @param int $iSend
+     * @param boolean $iSend
      * @param int $iSpeed
      * @param int $iColor
+	 * @param int $iEnvelopeId
      * @return object
      */
-    public function document_upload($sFile, $iSend = false, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR)
+    public function document_upload($sFile, $iSend = false, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR, $iEnvelopeId = null)
     {
-        $aOptions = array('send' => (boolean)$iSend, 'speed' => $iSpeed, 'color' => $iColor);
+        $aOptions = array('send' => (boolean)$iSend, 'speed' => $iSpeed, 'color' => $iColor, 'envelope' => $iEnvelopeId);
         return $this->execute('document/upload', $aOptions, $sFile);
     }
 
@@ -585,7 +587,7 @@ class Pingen
 	 * @return mixed
 	 * @throws \Exception
 	 */
-    private function execute($sKeyword, $aBodyParameters = array(), $sFile = false)
+    public function execute($sKeyword, $aBodyParameters = array(), $sFile = false)
     {
         /* put together parameters */
         $aData = array();
