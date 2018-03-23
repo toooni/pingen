@@ -18,7 +18,9 @@
         "php": ">=5.2",
         "ext-curl": "*"
     },
-    "psr-4": {
-        "pingencom\\": "src/"
+    "autoload": {
+        "psr-4": {
+            "pingencom\\": "src/"
+        }
     }
 }
