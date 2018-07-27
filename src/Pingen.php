@@ -604,7 +604,7 @@ class Pingen
         $sURL = implode('/', $aURLParts);
 
         /* data may not be empty */
-        if (isset($aData['data']) && (!is_array(json_decode($aData['data'])) || !count(json_decode($aData['data']))))
+        if (isset($aData['data']) && (!is_array(json_decode($aData['data'], true)) || !count(json_decode($aData['data'], true))))
         {
             unset($aData['data']);
         }
