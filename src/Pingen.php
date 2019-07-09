@@ -76,11 +76,20 @@ class Pingen
      * @constant string Sending speed economy
      */
     const SPEED_ECONOMY = 2;
-    
+
+    /**
+     * @constant string Sending speed registered (only valid for Switzerland)
+     */
     const SPEED_EINSCHREIBEN = 3;
-    
+
+    /**
+     * @constant string Sending speed priority plus (only valid for Switzerland)
+     */
     const SPEED_A_POST_PLUS = 4;
-    
+
+    /**
+     * @constant string Sending speed slow-economy (only valid for Switzerland)
+     */
     const SPEED_B2_POST = 5;
 
     /**
