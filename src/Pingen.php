@@ -76,6 +76,12 @@ class Pingen
      * @constant string Sending speed economy
      */
     const SPEED_ECONOMY = 2;
+    
+    const SPEED_EINSCHREIBEN = 3;
+    
+    const SPEED_A_POST_PLUS = 4;
+    
+    const SPEED_B2_POST = 5;
 
     /**
      * @var string Base URL of Pingen API
@@ -206,11 +212,15 @@ class Pingen
      * @param int $iSpeed
      * @param int $iColor
 	 * @param int $iEnvelopeId
+	 * @param array $aValues
      * @return object
      */
-    public function document_upload($sFile, $iSend = false, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR, $iEnvelopeId = null)
+    public function document_upload($sFile, $iSend = false, $iSpeed = self::SPEED_PRIORITY, $iColor = self::PRINT_COLOR, $iEnvelopeId = null, $aValues = [])
     {
         $aOptions = array('send' => (boolean)$iSend, 'speed' => $iSpeed, 'color' => $iColor, 'envelope' => $iEnvelopeId);
+        if (empty($aValues) === false) {
+            $aOptions['values'] = $aValues;
+        }
         return $this->execute('document/upload', $aOptions, $sFile);
     }
 
